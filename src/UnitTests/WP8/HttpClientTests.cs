@@ -39,5 +39,18 @@ namespace Win8UnitTest
 			Assert.IsFalse(response.IsSuccessStatusCode);
 			Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.MethodNotAllowed);
 		}
+		[TestMethod]
+		public async Task GetAsyncTest_POST2()
+		{
+			byte[] bytes = Encoding.UTF8.GetBytes("Where=1%3D1");
+			System.IO.MemoryStream ms = new System.IO.MemoryStream(bytes);
+			StreamContent streamContent = new StreamContent(ms);
+			HttpClient client = new HttpClient();
+			var response = await client.PostAsync("http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Fire/Sheep/FeatureServer/0/query?f=pjson", streamContent);
+			string result = await response.Content.ReadAsStringAsync();
+			Assert.IsFalse(response.IsSuccessStatusCode);
+			Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
+		}
+		
 	}
 }
