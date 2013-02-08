@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="DecompressionMethods.cs" />
     <Compile Include="Http\ByteArrayContent.cs" />
+    <Compile Include="Http\FormUrlEncodedContent.cs" />
     <Compile Include="Http\Headers\ContentDispositionHeaderValue.cs" />
     <Compile Include="Http\Headers\ContentRangeHeaderValue.cs" />
     <Compile Include="Http\Headers\HttpContentHeaders.cs" />
