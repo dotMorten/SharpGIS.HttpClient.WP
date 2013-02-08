@@ -42,7 +42,11 @@ namespace System.Net.Http
 		/// </returns>
 		protected override Task<Stream> CreateContentReadStreamAsync()
 		{
+#if WP7
+			return TaskEx.FromResult(m_stream);
+#else
 			return Task.FromResult(m_stream);
+#endif
 		}
 	}
 }
