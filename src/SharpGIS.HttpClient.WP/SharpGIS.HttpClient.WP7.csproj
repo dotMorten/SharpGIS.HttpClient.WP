@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DecompressionMethods.cs" />
+    <Compile Include="Http\ByteArrayContent.cs" />
     <Compile Include="Http\Headers\ContentDispositionHeaderValue.cs" />
     <Compile Include="Http\Headers\ContentRangeHeaderValue.cs" />
     <Compile Include="Http\Headers\HttpContentHeaders.cs" />
@@ -86,8 +87,12 @@
     <Compile Include="Http\HttpRequestMessage.cs" />
     <Compile Include="Http\Headers\HttpResponseHeaders.cs" />
     <Compile Include="Http\HttpResponseMessage.cs" />
+    <Compile Include="Http\MultipartContent.cs" />
+    <Compile Include="Http\MultipartFormDataContent.cs" />
+    <Compile Include="Http\StringContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Http\StreamContent.cs" />
+    <Compile Include="TransportContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

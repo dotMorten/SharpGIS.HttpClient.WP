@@ -22,6 +22,35 @@ namespace System.Net.Http.Headers
 		{
 			m_headers = headers;
 		}
+		// Summary:
+		//     Adds the specified header and its values into the System.Net.Http.Headers.HttpHeaders
+		//     collection.
+		//
+		// Parameters:
+		//   name:
+		//     The header to add to the collection.
+		//
+		//   values:
+		//     A list of header values to add to the collection.
+		public void Add(string name, IEnumerable<string> values)
+		{
+			m_headers[name] = string.Join("; ", values);
+		}
+		//
+		// Summary:
+		//     Adds the specified header and its value into the System.Net.Http.Headers.HttpHeaders
+		//     collection.
+		//
+		// Parameters:
+		//   name:
+		//     The header to add to the collection.
+		//
+		//   value:
+		//     The content of the header.
+		public void Add(string name, string value)
+		{
+			m_headers[name] = value;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the System.Net.Http.Headers.HttpHeaders class.
@@ -30,13 +59,21 @@ namespace System.Net.Http.Headers
 		{
 			m_headers = new WebHeaderCollection();
 		}
+		internal IEnumerable<KeyValuePair<string,string>> InternalHeaders
+		{
+			get
+			{
+				foreach (var key in m_headers.AllKeys)
+					yield return new KeyValuePair<string, string>(key, m_headers[key]);
+			}
+		}
 
 		public IEnumerator<KeyValuePair<string, IEnumerable<string>>> GetEnumerator()
 		{
 			foreach (var header in m_headers.AllKeys)
 			{
 				yield return new KeyValuePair<string, IEnumerable<string>>(header,
-					m_headers[header].Split(new char[] { ',' }));
+					m_headers[header].Split(new string[] { "; " }, StringSplitOptions.None));
 			}
 		}
 
@@ -49,7 +86,7 @@ namespace System.Net.Http.Headers
 		{
 			var header = m_headers[name];
 			if (header != null)
-				return header.Split(new char[] { ',' });
+				return header.Split(new string[] { "; " }, StringSplitOptions.None);
 			return null;
 		}
 

@@ -48,5 +48,39 @@ namespace System.Net.Http
 			return Task.FromResult(m_stream);
 #endif
 		}
+
+		/// <summary>
+		/// Serialize the HTTP content to a stream as an asynchronous operation.
+		/// </summary>
+		/// <param name="stream">The target stream.</param>
+		/// <param name="context">Information about the transport (channel binding token, for example). This
+		/// parameter may be null.</param>
+		/// <returns>
+		/// Returns System.Threading.Tasks.Task.The task object representing the asynchronous
+		/// operation.
+		/// </returns>
+		protected override Task SerializeToStreamAsync(Stream stream, System.Net.TransportContext context)
+		{
+			return m_stream.CopyToAsync(stream);
+		}
+
+		/// <summary>
+		/// Determines whether the HTTP content has a valid length in bytes.
+		/// </summary>
+		/// <param name="length">The length in bytes of the HHTP content.</param>
+		/// <returns>Returns System.Boolean.true if length is a valid length; otherwise, false.</returns>
+		protected internal override bool TryComputeLength(out long length)
+		{
+			if (m_stream.CanSeek)
+			{
+				length = m_stream.Length;
+				return true;
+			}
+			else
+			{
+				length = -1;
+				return false;
+			}
+		}
 	}
 }

@@ -15,14 +15,51 @@ namespace System.Net.Http
 		/// </summary>
 		protected HttpContent()
 		{
-
+			this.Headers = new HttpContentHeaders(new WebHeaderCollection());
 		}
+
 		/// <summary>
-		///  Write the HTTP content to a memory stream as an asynchronous operation.
+		/// Gets the HTTP content headers as defined in RFC 2616.
+		/// </summary>
+		/// <value>
+		/// Returns System.Net.Http.Headers.HttpContentHeaders.The content headers as
+		/// defined in RFC 2616.
+		/// </value>
+		public HttpContentHeaders Headers { get; internal set; }
+
+		/// <summary>
+		/// Write the HTTP content to a stream as an asynchronous operation.
+		/// </summary>
+		/// <param name="stream">The target stream.</param>
+		/// <returns>
+		/// The task object representing the asynchronous operation.
+		/// </returns>
+		public Task CopyToAsync(Stream stream)
+		{
+			return CopyToAsync(stream, null);
+		}
+
+		/// <summary>
+		/// Write the HTTP content to a stream as an asynchronous operation.
+		/// </summary>
+		/// <param name="stream">The target stream.</param>
+		/// <param name="context">
+		/// Information about the transport (channel binding token, for example). This
+		/// parameter may be null.
+		/// </param>
+		/// <returns>
+		/// The task object representing the asynchronous operation.
+		/// </returns>
+		public Task CopyToAsync(Stream stream, TransportContext context)
+		{
+			return SerializeToStreamAsync(stream, context);
+		}
+
+		/// <summary>
+		/// Write the HTTP content to a memory stream as an asynchronous operation.
 		/// </summary>
 		/// <returns>
-		/// Returns System.Threading.Tasks.Task<TResult>.The task object representing
-		/// the asynchronous operation.
+		/// The task object representing the asynchronous operation.
 		/// </returns>
 		protected virtual Task<Stream> CreateContentReadStreamAsync()
 		{
@@ -30,14 +67,34 @@ namespace System.Net.Http
 			throw new NotImplementedException();
 		}
 
-		//protected HttpContent(System.IO.Stream stream)
-		//{
-		//	m_stream = stream;
-		//}
+		/// <summary>
+		/// Serialize the HTTP content to a memory buffer as an asynchronous operation.
+		/// </summary>
+		/// <returns>
+		///  The task object representing the asynchronous operation.
+		/// </returns>
+		public Task LoadIntoBufferAsync()
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Serialize the HTTP content to a memory buffer as an asynchronous operation.
+		/// </summary>
+		/// <param name="maxBufferSize">The maximum size, in bytes, of the buffer to use.</param>
+		/// <returns>
+		/// The task object representing the asynchronous operation.
+		/// </returns>
+		public Task LoadIntoBufferAsync(long maxBufferSize)
+		{
+			throw new NotImplementedException();
+		}
+
 		public Task<System.IO.Stream> ReadAsStreamAsync()
 		{
 			return CreateContentReadStreamAsync();
 		}
+
 		public async Task<byte[]> ReadAsByteArrayAsync()
 		{
 			Stream stream = await ReadAsStreamAsync();
@@ -59,24 +116,53 @@ namespace System.Net.Http
 				return buffer;
 			}
 		}
+
 		public async Task<string> ReadAsStringAsync()
 		{
 			var bytes = await ReadAsByteArrayAsync();
-
 			return UTF8Encoding.UTF8.GetString(bytes, 0, bytes.Length);
 		}
 
+		/// <summary>
+		/// Serialize the HTTP content to a stream as an asynchronous operation.
+		/// </summary>
+		/// <param name="stream">The target stream.</param>
+		/// <param name="context">
+		/// Information about the transport (channel binding token, for example). This
+		/// parameter may be null.
+		/// </param>
+		/// <returns>
+		/// The task object representing the asynchronous operation.
+		/// </returns>
+		protected abstract Task SerializeToStreamAsync(Stream stream, TransportContext context);
+	
+		/// <summary>
+		/// Determines whether the HTTP content has a valid length in bytes.
+		/// </summary>
+		/// <param name="length">The length in bytes of the HHTP content.</param>
+		/// <returns>true if length is a valid length; otherwise, false.</returns>
+		protected internal abstract bool TryComputeLength(out long length);
+
+		/// <summary>
+		/// Releases the unmanaged resources and disposes of the managed resources used
+		/// by the <see cref="HttpContent"/>.
+		/// </summary>
 		public void Dispose()
 		{
+			Dispose(true);
 		}
 
 		/// <summary>
-		/// Gets the HTTP content headers as defined in RFC 2616.
+		/// Releases the unmanaged resources used by the <see cref="HttpContent"/>
+		/// and optionally disposes of the managed resources.
 		/// </summary>
-		/// <value>
-		/// Returns System.Net.Http.Headers.HttpContentHeaders.The content headers as
-		/// defined in RFC 2616.
-		/// </value>
-		public HttpContentHeaders Headers { get; internal set; }
+		/// <param name="disposing">
+		/// true to release both managed and unmanaged resources; false to releases only
+		/// unmanaged resources.
+		/// </param>
+		protected virtual void Dispose(bool disposing)
+		{
+
+		}
 	}
 }

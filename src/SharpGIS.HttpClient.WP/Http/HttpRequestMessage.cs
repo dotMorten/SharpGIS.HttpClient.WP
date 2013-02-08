@@ -36,6 +36,7 @@ namespace System.Net.Http
 			Properties = new Dictionary<string, object>();
 			Version = new Version("1.1");
 			Method = method;
+			Headers = new HttpRequestHeaders(new WebHeaderCollection());
 		}
 
 		public void Dispose()

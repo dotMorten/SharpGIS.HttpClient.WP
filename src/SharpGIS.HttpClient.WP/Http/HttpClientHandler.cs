@@ -1,4 +1,5 @@
 ﻿using SharpGIS.HttpClient.WP.GZip;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -41,6 +42,31 @@ namespace System.Net.Http
 				webRequest.AllowAutoRedirect = this.AllowAutoRedirect;
 				webRequest.Credentials = this.Credentials;
 				webRequest.UseDefaultCredentials = this.UseDefaultCredentials;
+				Action<IEnumerable<KeyValuePair<string,string>>> addHeaders = (headers) =>
+					{
+						if (headers == null)
+							return;
+						foreach (var header in headers)
+						{
+							switch (header.Key)
+							{
+								case "Accept":
+									webRequest.Accept = header.Value;
+									break;
+								case "Content-Type":
+									webRequest.ContentType = header.Value;
+									break;
+								case "UserAgent":
+									webRequest.UserAgent = header.Value;
+									break;
+								default:
+									webRequest.Headers[header.Key] = header.Value;
+									break;
+							}
+						}
+					};
+				addHeaders(request.Headers.InternalHeaders);
+				addHeaders(request.Content.Headers.InternalHeaders);
 
 				var beginGetResponseDelegate = new AsyncCallback(delegate(IAsyncResult asynchronousResult2)
 				{
@@ -67,6 +93,11 @@ namespace System.Net.Http
 				}
 				else
 				{
+#if !WP7
+					long length = -1;
+					if (request.Content.TryComputeLength(out length))
+						webRequest.ContentLength = length;
+#endif
 					webRequest.BeginGetRequestStream(new AsyncCallback(async delegate(IAsyncResult asynchronousResult)
 					{
 						HttpWebRequest req = (HttpWebRequest)asynchronousResult.AsyncState;
@@ -87,14 +118,12 @@ namespace System.Net.Http
 									tcs.SetException(ex);
 									return;
 								}
-								StreamWriter writer = new StreamWriter(postStream);
-								writer.Write(await request.Content.ReadAsByteArrayAsync());
+								await request.Content.CopyToAsync(postStream);
 								if (cancellationToken.IsCancellationRequested)
 								{
 									tcs.SetCanceled();
 									return;
 								}
-								writer.Flush();
 								postStream.Close();
 							}
 
