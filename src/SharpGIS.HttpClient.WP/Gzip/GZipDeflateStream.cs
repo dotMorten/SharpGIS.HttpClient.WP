@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Resources;
 
-namespace SharpGIS.HttpClient.WP8.GZip
+namespace SharpGIS.HttpClient.WP.GZip
 {
 	internal sealed class GZipInflateStream : Stream
 	{

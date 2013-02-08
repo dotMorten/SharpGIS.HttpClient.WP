@@ -1,9 +1,5 @@
-﻿using SharpGIS.HttpClient.WP8.GZip;
-using System;
-using System.Collections.Generic;
+﻿using SharpGIS.HttpClient.WP.GZip;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace System.Net.Http

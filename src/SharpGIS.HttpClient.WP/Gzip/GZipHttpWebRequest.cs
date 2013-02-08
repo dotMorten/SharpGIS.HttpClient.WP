@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
 
-namespace SharpGIS.HttpClient.WP8.GZip
+namespace SharpGIS.HttpClient.WP.GZip
 {
 	/// <summary>
 	/// This is really just a wrapper class for HttpWebRequest that adds the gzip header,
@@ -37,7 +36,7 @@ namespace SharpGIS.HttpClient.WP8.GZip
 		{
 			var response = _internalWebRequest.EndGetResponse(asyncResult);
 			if (response.Headers[HttpRequestHeader.ContentEncoding] == "gzip" && response is HttpWebResponse)
-				return new GZipWebClient.GZipWebResponse(response as HttpWebResponse);
+				return new GZipWebResponse(response as HttpWebResponse);
 			else
 				return response;
 		}
