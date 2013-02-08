@@ -105,7 +105,6 @@
     <Compile Include="Http\HttpRequestMessage.cs" />
     <Compile Include="Http\Headers\HttpResponseHeaders.cs" />
     <Compile Include="Http\HttpResponseMessage.cs" />
-    <Compile Include="Http\HttpStatusCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Http\StreamContent.cs" />
   </ItemGroup>

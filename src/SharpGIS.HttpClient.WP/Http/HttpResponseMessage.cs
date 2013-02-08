@@ -33,7 +33,7 @@ namespace System.Net.Http
 			if (response is HttpWebResponse)
 			{
 				var httpResponse = response as HttpWebResponse;
-				StatusCode = (System.Net.Http.HttpStatusCode)httpResponse.StatusCode;
+				StatusCode = httpResponse.StatusCode;
 				IsSuccessStatusCode = ((int)StatusCode >= 200 && (int)StatusCode <= 299);
 				ReasonPhrase = httpResponse.StatusDescription;
 			}
