@@ -105,7 +105,7 @@ namespace System.Net.Http
 				byte[] buffer = new byte[1024];
 				while ((count = await stream.ReadAsync(buffer, 0, 1024)) > 0)
 				{
-					ms.Write(buffer, 0, count);
+					await ms.WriteAsync(buffer, 0, count);
 				}
 				return ms.ToArray();
 			}
