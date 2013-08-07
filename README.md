@@ -1,5 +1,11 @@
 SharpGIS.HttpClient.WP
+----------------------------------------------------------------------------
+
+
+UPDATE: THIS PROJECT HAS BEEN DISCONTINUED. PLEASE USE THE OFFICIAL MICROSOFT PROVIDED HTTP CLIENT LIBRARY: https://www.nuget.org/packages/Microsoft.Net.Http
+
 ======================
+
 
 HttpClient implementation for Windows Phone.
 Allows you to share HttpClient code between Windows 8 and Windows Phone 8.
